@@ -3,87 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <title>For bby Zen 💘</title>
+
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: 'Comic Sans MS', cursive;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS', cursive;
+    overflow: hidden;
+}
 
-    .card {
-        background: white;
-        padding: 30px;
-        border-radius: 20px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        position: relative;
-        z-index: 2;
-    }
+.card {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 2;
+}
 
-    h1 {
-        color: #ff5c8a;
-    }
+h1 {
+    color: #ff4d6d;
+}
 
-    button {
-        font-size: 18px;
-        padding: 10px 22px;
-        margin: 15px;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
+.buttons {
+    margin-top: 20px;
+    position: relative;
+    height: 120px;
+}
 
-    #yesBtn {
-        background: #ff5c8a;
-        color: white;
-    }
+button {
+    font-size: 18px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    position: absolute;
+}
 
-    #noBtn {
-        background: #ddd;
-        position: absolute;
-    }
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+    left: 20%;
+}
 
-    .hidden {
-        display: none;
-    }
+#noBtn {
+    background: #ddd;
+    left: 55%;
+}
 
-    /* Floating hearts */
-    .heart {
-        position: absolute;
-        font-size: 24px;
-        animation: float 5s linear infinite;
-        opacity: 0.8;
-    }
+.hidden {
+    display: none;
+}
 
-    @keyframes float {
-        0% {
-            transform: translateY(100vh) scale(0.5);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-10vh) scale(1.2);
-            opacity: 0;
-        }
-    }
+img {
+    width: 200px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
 
-    img {
-        width: 200px;
-        border-radius: 15px;
-        margin-top: 15px;
-    }
+.secret {
+    margin-top: 15px;
+    font-size: 20px;
+    color: #ff2e63;
+}
 
-    .secret {
-        margin-top: 15px;
-        color: #ff2e63;
-        font-size: 20px;
-        display: none;
+/* Hearts */
+.heart {
+    position: absolute;
+    font-size: 24px;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+        opacity: 1;
     }
+    to {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
 </style>
 </head>
 
@@ -92,113 +96,89 @@
 <div class="card" id="card">
     <h1>Will you be my Valentine date, bby Zen? 💘</h1>
 
-    <button id="yesBtn">Yes 💖</button>
-    <button id="noBtn">No 🙃</button>
+    <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn">No 🙃</button>
+    </div>
 
     <div id="result" class="hidden">
         <h1>Yay! See you on 14th Feb 💕</h1>
-        <img src="yay-dog.jpg" alt="cute yay meme">
-        <div class="secret" id="secret">I love you, bby Zen 💗</div>
+        <img src="yay-dog.jpg">
+        <div class="secret">I love you, bby Zen 💗</div>
     </div>
 </div>
 
 <!-- Cute sound -->
 <audio id="yesSound">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3" type="audio/mpeg">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3">
 </audio>
 
 <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const result = document.getElementById("result");
-    const card = document.getElementById("card");
-    const yesSound = document.getElementById("yesSound");
-    const secret = document.getElementById("secret");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const result = document.getElementById("result");
+const card = document.getElementById("card");
+const yesSound = document.getElementById("yesSound");
 
-    // ตั้งตำแหน่งเริ่มต้นของปุ่ม No
-    let noX = window.innerWidth / 2 + 60;
-    let noY = window.innerHeight / 2 + 80;
+// No button escape (ใกล้ๆ)
+noBtn.addEventListener("mouseenter", () => {
+    const moveX = (Math.random() * 120) - 60;
+    const moveY = (Math.random() * 80) - 40;
 
-    noBtn.style.left = noX + "px";
-    noBtn.style.top = noY + "px";
+    let newX = noBtn.offsetLeft + moveX;
+    let newY = noBtn.offsetTop + moveY;
 
-    // ปุ่ม No หนีแบบใกล้ๆ
-    noBtn.addEventListener("mouseenter", () => {
-        const moveRange = 120; // ระยะหนี (ยิ่งน้อย ยิ่งใกล้)
-        const offsetX = (Math.random() - 0.5) * moveRange;
-        const offsetY = (Math.random() - 0.5) * moveRange;
+    newX = Math.max(0, Math.min(newX, 200));
+    newY = Math.max(0, Math.min(newY, 80));
 
-        noX = Math.min(
-            window.innerWidth - noBtn.offsetWidth,
-            Math.max(0, noX + offsetX)
-        );
-        noY = Math.min(
-            window.innerHeight - noBtn.offsetHeight,
-            Math.max(0, noY + offsetY)
-        );
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
+});
 
-        noBtn.style.left = noX + "px";
-        noBtn.style.top = noY + "px";
-    });
+// Yes button
+yesBtn.addEventListener("click", () => {
+    yesSound.play();
+    explodeHearts();
+    card.innerHTML = result.innerHTML;
+    result.classList.remove("hidden");
+});
 
-    // เมื่อกด Yes
-    yesBtn.addEventListener("click", () => {
-        yesSound.play();
-        explodeHearts(); // 💥 ระเบิดหัวใจ
-        card.innerHTML = "";
-        card.appendChild(result);
-        result.classList.remove("hidden");
-        secret.style.display = "block";
-    });
+// Floating hearts
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💕";
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+}, 400);
 
-    // หัวใจลอยปกติ
-    function createHeart() {
+// Heart explosion
+function explodeHearts() {
+    for (let i = 0; i < 50; i++) {
         const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "💕";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+        heart.innerHTML = "💖";
+        heart.style.position = "absolute";
+        heart.style.left = "50%";
+        heart.style.top = "50%";
+        heart.style.fontSize = "30px";
         document.body.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 6000);
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 400;
+
+        heart.animate([
+            { transform: "translate(0,0)", opacity: 1 },
+            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`, opacity: 0 }
+        ], {
+            duration: 1200,
+            easing: "ease-out"
+        });
+
+        setTimeout(() => heart.remove(), 1300);
     }
-
-    setInterval(createHeart, 400);
-
-    // 💥 Heart Explosion
-    function explodeHearts() {
-        for (let i = 0; i < 40; i++) {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerHTML = "💖";
-
-            const x = window.innerWidth / 2;
-            const y = window.innerHeight / 2;
-
-            heart.style.left = x + "px";
-            heart.style.top = y + "px";
-            heart.style.fontSize = "30px";
-
-            const angle = Math.random() * 2 * Math.PI;
-            const distance = Math.random() * 400;
-
-            heart.animate([
-                { transform: "translate(0,0)", opacity: 1 },
-                {
-                    transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`,
-                    opacity: 0
-                }
-            ], {
-                duration: 1200,
-                easing: "ease-out"
-            });
-
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1300);
-        }
-    }
+}
 </script>
 
 </body>
 </html>
-
