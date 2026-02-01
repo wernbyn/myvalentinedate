@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Zen 💕</title>
+
+<style>
+    body {
+        font-family: 'Comic Sans MS', cursive;
+        background: linear-gradient(135deg, #ffe6f0, #fff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .link {
+        font-size: 22px;
+        color: #ff4d88;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .popup {
+        display: none;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        position: relative;
+        width: 320px;
+    }
+
+    button {
+        padding: 10px 22px;
+        font-size: 16px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 10px;
+    }
+
+    #yesBtn {
+        background: #ff4d88;
+        color: white;
+    }
+
+    #noBtn {
+        background: #ddd;
+        position: absolute;
+    }
+
+    img {
+        width: 220px;
+        margin-top: 15px;
+        border-radius: 15px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="link" onclick="openPopup()">💌 Click this, Zen</div>
+
+<div class="popup" id="popup">
+    <h2>Zen 💖</h2>
+    <p>Will you be my Valentine date?</p>
+
+    <button id="yesBtn" onclick="yesClicked()">Yes 💕</button>
+    <button id="noBtn" onmouseover="moveNo()">No 🙄</button>
+</div>
+
+<script>
+function openPopup() {
+    document.getElementById("popup").style.display = "block";
+}
+
+function moveNo() {
+    const btn = document.getElementById("noBtn");
+    const x = Math.random() * 200;
+    const y = Math.random() * 120;
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+}
+
+function yesClicked() {
+    document.getElementById("popup").innerHTML = `
+        <h2>YAYYYYY 🥰</h2>
+        <p>See you on <b>14th February</b> 💘</p>
+        <img src="yay-dog.jpg" alt="yay meme">
+    `;
+}
+</script>
+
+</body>
+</html>
