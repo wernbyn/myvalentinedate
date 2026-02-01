@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>For bby Zen 💘</title>
 
-<!-- Handwritten font -->
 <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
@@ -19,13 +18,14 @@ body {
     overflow: hidden;
 }
 
-/* Card */
 .card {
     background: white;
-    padding: 30px 40px;
-    border-radius: 20px;
+    padding: 40px;
+    border-radius: 24px;
+    width: 360px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    position: relative;
     z-index: 2;
 }
 
@@ -35,53 +35,50 @@ h1 {
 
 /* Buttons */
 .buttons {
-    margin-top: 20px;
-    position: relative;
-    height: 120px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
 }
 
 button {
-    font-size: 18px;
-    padding: 10px 24px;
+    font-size: 20px;
+    padding: 14px 32px;
     border: none;
-    border-radius: 30px;
+    border-radius: 40px;
     cursor: pointer;
-    position: absolute;
 }
 
 #yesBtn {
     background: #ff4d6d;
     color: white;
-    left: 20%;
 }
 
 #noBtn {
     background: #ddd;
-    left: 55%;
+    position: relative;
 }
 
-/* Result */
 .hidden {
     display: none;
 }
 
 img {
-    width: 200px;
-    border-radius: 15px;
-    margin-top: 15px;
+    width: 220px;
+    border-radius: 16px;
+    margin: 20px 0;
 }
 
+/* See next */
 #nextBtn {
-    margin-top: 20px;
+    margin-top: 25px;
     background: #ff8fab;
     color: white;
-    font-size: 16px;
-    padding: 10px 22px;
-    border-radius: 25px;
-    border: none;
+    font-size: 18px;
+    padding: 14px 36px;
+    border-radius: 40px;
 }
 
-/* Floating hearts */
+/* Hearts */
 .heart {
     position: absolute;
     font-size: 24px;
@@ -89,21 +86,15 @@ img {
 }
 
 @keyframes float {
-    from {
-        transform: translateY(100vh);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(-10vh);
-        opacity: 0;
-    }
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
 }
 
 /* Overlay */
 #overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.45);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,13 +107,13 @@ img {
 
 /* Envelope */
 .envelope {
-    width: 300px;
-    height: 200px;
+    width: 360px;
+    height: 240px;
     background: #ffcad4;
-    border-radius: 10px;
+    border-radius: 16px;
     position: relative;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.6s;
 }
 
 .envelope::before {
@@ -130,33 +121,39 @@ img {
     position: absolute;
     top: 0;
     left: 0;
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
-    border-top: 100px solid #ffb3c6;
+    border-left: 180px solid transparent;
+    border-right: 180px solid transparent;
+    border-top: 120px solid #ffb3c6;
+    transform-origin: top;
+    transition: 0.6s;
 }
 
 /* Letter */
 .letter {
     position: absolute;
-    top: 25px;
-    left: 20px;
-    width: 260px;
-    height: 280px;
-    background: #fff;
-    border-radius: 10px;
-    padding: 18px;
+    top: 30px;
+    left: 25px;
+    width: 310px;
+    height: 340px;
+    background: white;
+    border-radius: 14px;
+    padding: 22px;
     font-family: 'Patrick Hand', cursive;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;
-    transform: translateY(140px);
+    transform: translateY(160px);
     opacity: 0;
     transition: 0.6s;
     overflow-y: auto;
 }
 
-/* Open envelope */
+/* Open animation */
+.envelope.open::before {
+    transform: rotateX(180deg);
+}
+
 .envelope.open .letter {
-    transform: translateY(-140px);
+    transform: translateY(-160px);
     opacity: 1;
 }
 </style>
@@ -165,40 +162,40 @@ img {
 <body>
 
 <div class="card" id="card">
-    <h1>Will you be my Valentine date, bby Zen? 💘</h1>
-
-    <div class="buttons">
-        <button id="yesBtn">Yes 💖</button>
-        <button id="noBtn">No 🙃</button>
+    <div id="page1">
+        <h1>Will you be my Valentine date,<br>bby Zen? 💘</h1>
+        <div class="buttons">
+            <button id="yesBtn">Yes 💖</button>
+            <button id="noBtn">No 🙃</button>
+        </div>
     </div>
 
-    <div id="result" class="hidden">
+    <div id="page2" class="hidden">
         <h1>Yay! See you on 14th Feb 💕</h1>
         <img src="yay-dog.jpg">
-        <br>
         <button id="nextBtn">See next ➜ 💌</button>
     </div>
 </div>
 
-<!-- Envelope popup -->
+<!-- Envelope -->
 <div id="overlay" class="hidden">
     <div class="envelope" id="envelope">
         <div class="letter">
             <strong>To, bby Zen 💖</strong><br><br>
 
-            Thank you for being so kind to me,  
-            for supporting me,  
-            and for always being there every time I needed you 🥹  
+            Thank you for being kind to me,  
+            supporting me,  
+            and always being there every time I needed you 🥹  
             <br><br>
             You make my days lighter,  
-            my heart calmer,  
+            my worries smaller,  
             and my life a lot cuter than before 😆  
             <br><br>
             I’ll always support you,  
-            cheer for you,  
-            and love you even on your grumpy days 💕  
+            stand by you,  
+            and love you — even when you’re grumpy 💕  
             <br><br>
-            No refunds, no returns —  
+            No refunds, no returns,  
             you’re stuck with me already 😌  
             <br><br>
 
@@ -210,39 +207,26 @@ img {
     </div>
 </div>
 
-<!-- Sound -->
 <audio id="yesSound">
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3">
 </audio>
 
 <script>
-const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-const result = document.getElementById("result");
-const card = document.getElementById("card");
+const noBtn = document.getElementById("noBtn");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
 const yesSound = document.getElementById("yesSound");
 const nextBtn = document.getElementById("nextBtn");
 const overlay = document.getElementById("overlay");
 const envelope = document.getElementById("envelope");
 
-// prepare sound
 yesSound.load();
 
 // No button escape
-let noX = 140;
-let noY = 30;
-noBtn.style.left = noX + "px";
-noBtn.style.top = noY + "px";
-
 noBtn.addEventListener("mouseenter", () => {
-    noX += (Math.random() * 300 - 150);
-    noY += (Math.random() * 160 - 80);
-
-    noX = Math.max(0, Math.min(noX, 260));
-    noY = Math.max(0, Math.min(noY, 80));
-
-    noBtn.style.left = noX + "px";
-    noBtn.style.top = noY + "px";
+    noBtn.style.transform =
+        `translate(${Math.random()*200-100}px, ${Math.random()*120-60}px)`;
 });
 
 // Yes click
@@ -250,9 +234,8 @@ yesBtn.addEventListener("click", () => {
     yesSound.currentTime = 0;
     yesSound.play();
     explodeHearts();
-
-    card.querySelector(".buttons").remove();
-    result.classList.remove("hidden");
+    page1.classList.add("hidden");
+    page2.classList.remove("hidden");
 });
 
 // Floating hearts
@@ -265,41 +248,39 @@ setInterval(() => {
     setTimeout(() => heart.remove(), 5000);
 }, 400);
 
-// Heart explosion
+// Explosion
 function explodeHearts() {
     for (let i = 0; i < 60; i++) {
-        const heart = document.createElement("div");
-        heart.innerHTML = "💖";
-        heart.style.position = "absolute";
-        heart.style.left = "50%";
-        heart.style.top = "50%";
-        heart.style.fontSize = "30px";
-        document.body.appendChild(heart);
+        const h = document.createElement("div");
+        h.innerHTML = "💖";
+        h.style.position = "absolute";
+        h.style.left = "50%";
+        h.style.top = "50%";
+        h.style.fontSize = "30px";
+        document.body.appendChild(h);
 
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 500;
+        const a = Math.random() * Math.PI * 2;
+        const d = Math.random() * 500;
 
-        heart.animate([
+        h.animate([
             { transform: "translate(0,0)", opacity: 1 },
-            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`, opacity: 0 }
-        ], { duration: 1200, easing: "ease-out" });
+            { transform: `translate(${Math.cos(a)*d}px, ${Math.sin(a)*d}px)`, opacity: 0 }
+        ], { duration: 1200 });
 
-        setTimeout(() => heart.remove(), 1300);
+        setTimeout(() => h.remove(), 1300);
     }
 }
 
-// See next
+// Envelope logic
 nextBtn.addEventListener("click", () => {
     overlay.classList.remove("hidden");
 });
 
-// Open envelope
 envelope.addEventListener("click", () => {
     envelope.classList.toggle("open");
 });
 
-// Close overlay
-overlay.addEventListener("click", (e) => {
+overlay.addEventListener("click", e => {
     if (e.target === overlay) {
         overlay.classList.add("hidden");
         envelope.classList.remove("open");
