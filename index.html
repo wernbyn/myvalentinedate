@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>For bby Zen 💘</title>
 
+<!-- Handwritten font -->
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
 <style>
 body {
     margin: 0;
@@ -16,6 +19,7 @@ body {
     overflow: hidden;
 }
 
+/* Card */
 .card {
     background: white;
     padding: 30px 40px;
@@ -29,6 +33,7 @@ h1 {
     color: #ff4d6d;
 }
 
+/* Buttons */
 .buttons {
     margin-top: 20px;
     position: relative;
@@ -55,6 +60,7 @@ button {
     left: 55%;
 }
 
+/* Result */
 .hidden {
     display: none;
 }
@@ -65,13 +71,17 @@ img {
     margin-top: 15px;
 }
 
-.secret {
-    margin-top: 15px;
-    font-size: 20px;
-    color: #ff2e63;
+#nextBtn {
+    margin-top: 20px;
+    background: #ff8fab;
+    color: white;
+    font-size: 16px;
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: none;
 }
 
-/* Hearts */
+/* Floating hearts */
 .heart {
     position: absolute;
     font-size: 24px;
@@ -87,6 +97,67 @@ img {
         transform: translateY(-10vh);
         opacity: 0;
     }
+}
+
+/* Overlay */
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#overlay.hidden {
+    display: none;
+}
+
+/* Envelope */
+.envelope {
+    width: 300px;
+    height: 200px;
+    background: #ffcad4;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 100px solid #ffb3c6;
+}
+
+/* Letter */
+.letter {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    width: 260px;
+    height: 280px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 16px;
+    line-height: 1.6;
+    transform: translateY(140px);
+    opacity: 0;
+    transition: 0.6s;
+    overflow-y: auto;
+}
+
+/* Open envelope */
+.envelope.open .letter {
+    transform: translateY(-140px);
+    opacity: 1;
 }
 </style>
 </head>
@@ -104,11 +175,42 @@ img {
     <div id="result" class="hidden">
         <h1>Yay! See you on 14th Feb 💕</h1>
         <img src="yay-dog.jpg">
-        <div class="secret">I love you, bby Zen 💗</div>
+        <br>
+        <button id="nextBtn">See next ➜ 💌</button>
     </div>
 </div>
 
-<!-- Cute sound -->
+<!-- Envelope popup -->
+<div id="overlay" class="hidden">
+    <div class="envelope" id="envelope">
+        <div class="letter">
+            <strong>To, bby Zen 💖</strong><br><br>
+
+            Thank you for being so kind to me,  
+            for supporting me,  
+            and for always being there every time I needed you 🥹  
+            <br><br>
+            You make my days lighter,  
+            my heart calmer,  
+            and my life a lot cuter than before 😆  
+            <br><br>
+            I’ll always support you,  
+            cheer for you,  
+            and love you even on your grumpy days 💕  
+            <br><br>
+            No refunds, no returns —  
+            you’re stuck with me already 😌  
+            <br><br>
+
+            <div style="text-align:right;">
+                From, Wern<br>
+                xoxo 💋
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sound -->
 <audio id="yesSound">
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3">
 </audio>
@@ -119,50 +221,41 @@ const yesBtn = document.getElementById("yesBtn");
 const result = document.getElementById("result");
 const card = document.getElementById("card");
 const yesSound = document.getElementById("yesSound");
+const nextBtn = document.getElementById("nextBtn");
+const overlay = document.getElementById("overlay");
+const envelope = document.getElementById("envelope");
 
-// เตรียมเสียงล่วงหน้า (แก้ปัญหาไม่ดัง)
+// prepare sound
 yesSound.load();
 
-// ====== NO BUTTON ESCAPE (หนีแรงขึ้น แต่ยังอยู่ใกล้ๆ) ======
+// No button escape
 let noX = 140;
 let noY = 30;
-
 noBtn.style.left = noX + "px";
 noBtn.style.top = noY + "px";
 
 noBtn.addEventListener("mouseenter", () => {
-    const moveX = (Math.random() * 300) - 150; // หนีไกลขึ้น
-    const moveY = (Math.random() * 160) - 80;
+    noX += (Math.random() * 300 - 150);
+    noY += (Math.random() * 160 - 80);
 
-    noX += moveX;
-    noY += moveY;
-
-    // จำกัดให้อยู่ในกรอบปุ่ม
     noX = Math.max(0, Math.min(noX, 260));
-    noY = Math.max(0, Math.min(noY, 90));
+    noY = Math.max(0, Math.min(noY, 80));
 
     noBtn.style.left = noX + "px";
     noBtn.style.top = noY + "px";
 });
 
-// ====== YES BUTTON ======
+// Yes click
 yesBtn.addEventListener("click", () => {
-    // เล่นเสียง (ชัวร์)
     yesSound.currentTime = 0;
-    yesSound.play().catch(() => {
-        console.log("Sound blocked by browser");
-    });
-
+    yesSound.play();
     explodeHearts();
 
-    card.innerHTML = `
-        <h1>Yay! See you on 14th Feb 💕</h1>
-        <img src="yay-dog.jpg">
-        <div class="secret">I love you, bby Zen 💗</div>
-    `;
+    card.querySelector(".buttons").remove();
+    result.classList.remove("hidden");
 });
 
-// ====== FLOATING HEARTS ======
+// Floating hearts
 setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -170,9 +263,9 @@ setInterval(() => {
     heart.style.left = Math.random() * 100 + "vw";
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
-}, 350);
+}, 400);
 
-// ====== HEART EXPLOSION ======
+// Heart explosion
 function explodeHearts() {
     for (let i = 0; i < 60; i++) {
         const heart = document.createElement("div");
@@ -188,20 +281,31 @@ function explodeHearts() {
 
         heart.animate([
             { transform: "translate(0,0)", opacity: 1 },
-            {
-                transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`,
-                opacity: 0
-            }
-        ], {
-            duration: 1200,
-            easing: "ease-out"
-        });
+            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`, opacity: 0 }
+        ], { duration: 1200, easing: "ease-out" });
 
         setTimeout(() => heart.remove(), 1300);
     }
 }
+
+// See next
+nextBtn.addEventListener("click", () => {
+    overlay.classList.remove("hidden");
+});
+
+// Open envelope
+envelope.addEventListener("click", () => {
+    envelope.classList.toggle("open");
+});
+
+// Close overlay
+overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+        overlay.classList.add("hidden");
+        envelope.classList.remove("open");
+    }
+});
 </script>
 
 </body>
 </html>
-
