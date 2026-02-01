@@ -115,28 +115,43 @@
     const yesSound = document.getElementById("yesSound");
     const secret = document.getElementById("secret");
 
-    // Initial No button position
-    noBtn.style.left = "50%";
-    noBtn.style.top = "70%";
+    // ตั้งตำแหน่งเริ่มต้นของปุ่ม No
+    let noX = window.innerWidth / 2 + 60;
+    let noY = window.innerHeight / 2 + 80;
 
-    // No button escape logic
+    noBtn.style.left = noX + "px";
+    noBtn.style.top = noY + "px";
+
+    // ปุ่ม No หนีแบบใกล้ๆ
     noBtn.addEventListener("mouseenter", () => {
-        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        const moveRange = 120; // ระยะหนี (ยิ่งน้อย ยิ่งใกล้)
+        const offsetX = (Math.random() - 0.5) * moveRange;
+        const offsetY = (Math.random() - 0.5) * moveRange;
 
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
+        noX = Math.min(
+            window.innerWidth - noBtn.offsetWidth,
+            Math.max(0, noX + offsetX)
+        );
+        noY = Math.min(
+            window.innerHeight - noBtn.offsetHeight,
+            Math.max(0, noY + offsetY)
+        );
+
+        noBtn.style.left = noX + "px";
+        noBtn.style.top = noY + "px";
     });
 
+    // เมื่อกด Yes
     yesBtn.addEventListener("click", () => {
         yesSound.play();
+        explodeHearts(); // 💥 ระเบิดหัวใจ
         card.innerHTML = "";
         card.appendChild(result);
         result.classList.remove("hidden");
         secret.style.display = "block";
     });
 
-    // Floating hearts
+    // หัวใจลอยปกติ
     function createHeart() {
         const heart = document.createElement("div");
         heart.className = "heart";
@@ -148,8 +163,42 @@
         setTimeout(() => heart.remove(), 6000);
     }
 
-    setInterval(createHeart, 300);
+    setInterval(createHeart, 400);
+
+    // 💥 Heart Explosion
+    function explodeHearts() {
+        for (let i = 0; i < 40; i++) {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "💖";
+
+            const x = window.innerWidth / 2;
+            const y = window.innerHeight / 2;
+
+            heart.style.left = x + "px";
+            heart.style.top = y + "px";
+            heart.style.fontSize = "30px";
+
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * 400;
+
+            heart.animate([
+                { transform: "translate(0,0)", opacity: 1 },
+                {
+                    transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`,
+                    opacity: 0
+                }
+            ], {
+                duration: 1200,
+                easing: "ease-out"
+            });
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1300);
+        }
+    }
 </script>
 
 </body>
 </html>
+
