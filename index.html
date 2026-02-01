@@ -120,30 +120,49 @@ const result = document.getElementById("result");
 const card = document.getElementById("card");
 const yesSound = document.getElementById("yesSound");
 
-// No button escape (ใกล้ๆ)
+// เตรียมเสียงล่วงหน้า (แก้ปัญหาไม่ดัง)
+yesSound.load();
+
+// ====== NO BUTTON ESCAPE (หนีแรงขึ้น แต่ยังอยู่ใกล้ๆ) ======
+let noX = 140;
+let noY = 30;
+
+noBtn.style.left = noX + "px";
+noBtn.style.top = noY + "px";
+
 noBtn.addEventListener("mouseenter", () => {
-    const moveX = (Math.random() * 120) - 60;
-    const moveY = (Math.random() * 80) - 40;
+    const moveX = (Math.random() * 300) - 150; // หนีไกลขึ้น
+    const moveY = (Math.random() * 160) - 80;
 
-    let newX = noBtn.offsetLeft + moveX;
-    let newY = noBtn.offsetTop + moveY;
+    noX += moveX;
+    noY += moveY;
 
-    newX = Math.max(0, Math.min(newX, 200));
-    newY = Math.max(0, Math.min(newY, 80));
+    // จำกัดให้อยู่ในกรอบปุ่ม
+    noX = Math.max(0, Math.min(noX, 260));
+    noY = Math.max(0, Math.min(noY, 90));
 
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
+    noBtn.style.left = noX + "px";
+    noBtn.style.top = noY + "px";
 });
 
-// Yes button
+// ====== YES BUTTON ======
 yesBtn.addEventListener("click", () => {
-    yesSound.play();
+    // เล่นเสียง (ชัวร์)
+    yesSound.currentTime = 0;
+    yesSound.play().catch(() => {
+        console.log("Sound blocked by browser");
+    });
+
     explodeHearts();
-    card.innerHTML = result.innerHTML;
-    result.classList.remove("hidden");
+
+    card.innerHTML = `
+        <h1>Yay! See you on 14th Feb 💕</h1>
+        <img src="yay-dog.jpg">
+        <div class="secret">I love you, bby Zen 💗</div>
+    `;
 });
 
-// Floating hearts
+// ====== FLOATING HEARTS ======
 setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -151,11 +170,11 @@ setInterval(() => {
     heart.style.left = Math.random() * 100 + "vw";
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
-}, 400);
+}, 350);
 
-// Heart explosion
+// ====== HEART EXPLOSION ======
 function explodeHearts() {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 60; i++) {
         const heart = document.createElement("div");
         heart.innerHTML = "💖";
         heart.style.position = "absolute";
@@ -164,12 +183,15 @@ function explodeHearts() {
         heart.style.fontSize = "30px";
         document.body.appendChild(heart);
 
-        const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * 400;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 500;
 
         heart.animate([
             { transform: "translate(0,0)", opacity: 1 },
-            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`, opacity: 0 }
+            {
+                transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`,
+                opacity: 0
+            }
         ], {
             duration: 1200,
             easing: "ease-out"
@@ -182,3 +204,4 @@ function explodeHearts() {
 
 </body>
 </html>
+
