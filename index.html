@@ -2,95 +2,165 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Zen 💕</title>
-
+<title>For Zen 💘</title>
 <style>
     body {
-        font-family: 'Comic Sans MS', cursive;
-        background: linear-gradient(135deg, #ffe6f0, #fff);
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #ffdde1, #ee9ca7);
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        font-family: 'Comic Sans MS', cursive;
+        overflow: hidden;
     }
 
-    .link {
-        font-size: 22px;
-        color: #ff4d88;
-        cursor: pointer;
-        text-decoration: underline;
-    }
-
-    .popup {
-        display: none;
+    .card {
         background: white;
         padding: 30px;
         border-radius: 20px;
         text-align: center;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         position: relative;
-        width: 320px;
+        z-index: 2;
+    }
+
+    h1 {
+        color: #ff5c8a;
     }
 
     button {
-        padding: 10px 22px;
-        font-size: 16px;
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 15px;
         border: none;
-        border-radius: 25px;
+        border-radius: 30px;
         cursor: pointer;
-        margin: 10px;
+        transition: 0.3s;
+        position: relative;
     }
 
     #yesBtn {
-        background: #ff4d88;
+        background: #ff5c8a;
         color: white;
     }
 
     #noBtn {
-        background: #ddd;
+        background: #ccc;
+    }
+
+    /* Shake animation */
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
+    .shake {
+        animation: shake 0.4s infinite;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .heart {
         position: absolute;
+        color: pink;
+        font-size: 24px;
+        animation: float 5s linear infinite;
+        opacity: 0.8;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(100vh) scale(0.5);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-10vh) scale(1.2);
+            opacity: 0;
+        }
     }
 
     img {
-        width: 220px;
-        margin-top: 15px;
+        width: 200px;
         border-radius: 15px;
+        margin-top: 15px;
+    }
+
+    .secret {
+        margin-top: 15px;
+        color: #ff2e63;
+        font-size: 20px;
+        display: none;
     }
 </style>
 </head>
 
 <body>
 
-<div class="link" onclick="openPopup()">💌 Click this, Zen</div>
+<div class="card" id="card">
+    <h1>Will you be my Valentine date, Zen? 💘</h1>
 
-<div class="popup" id="popup">
-    <h2>Zen 💖</h2>
-    <p>Will you be my Valentine date?</p>
+    <button id="yesBtn">Yes 💖</button>
+    <button id="noBtn">No 🙃</button>
 
-    <button id="yesBtn" onclick="yesClicked()">Yes 💕</button>
-    <button id="noBtn" onmouseover="moveNo()">No 🙄</button>
+    <div id="result" class="hidden">
+        <h1>Yay! See you on 14th Feb 💕</h1>
+        <img src="yay-dog.jpg" alt="cute yay meme">
+        <div class="secret" id="secret">I love you, Zen 💗</div>
+    </div>
 </div>
 
+<audio id="yesSound">
+    <source src="https://www.soundjay.com/human/sounds/cheering-01.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-function openPopup() {
-    document.getElementById("popup").style.display = "block";
-}
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const result = document.getElementById("result");
+    const card = document.getElementById("card");
+    const yesSound = document.getElementById("yesSound");
+    const secret = document.getElementById("secret");
 
-function moveNo() {
-    const btn = document.getElementById("noBtn");
-    const x = Math.random() * 200;
-    const y = Math.random() * 120;
-    btn.style.left = x + "px";
-    btn.style.top = y + "px";
-}
+    noBtn.addEventListener("mouseover", () => {
+        noBtn.classList.add("shake");
 
-function yesClicked() {
-    document.getElementById("popup").innerHTML = `
-        <h2>YAYYYYY 🥰</h2>
-        <p>See you on <b>14th February</b> 💘</p>
-        <img src="yay-dog.jpg" alt="yay meme">
-    `;
-}
+        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+        noBtn.style.position = "absolute";
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+
+    yesBtn.addEventListener("click", () => {
+        yesSound.play();
+        card.innerHTML = "";
+        card.appendChild(result);
+        result.classList.remove("hidden");
+        secret.style.display = "block";
+    });
+
+    // Floating hearts
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💕";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }
+
+    setInterval(createHeart, 300);
 </script>
 
 </body>
